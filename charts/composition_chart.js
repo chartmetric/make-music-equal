@@ -1,6 +1,4 @@
 "use strict";
-import Chart from 'chart.js/auto';
-
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/solo-band-data.csv');
     const csvText = await response.text();

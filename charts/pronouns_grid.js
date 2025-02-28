@@ -1,5 +1,4 @@
 "use strict";
-import { Chart } from 'chart.js';
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix';
 
 Chart.register(MatrixController, MatrixElement);

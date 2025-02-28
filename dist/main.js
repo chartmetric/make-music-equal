@@ -613,10 +613,9 @@ window.Webflow.push(()=>{
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderPronounGridChart", ()=>renderPronounGridChart);
-var _chartJs = require("chart.js");
 var _chartjsChartMatrix = require("chartjs-chart-matrix");
 "use strict";
-(0, _chartJs.Chart).register((0, _chartjsChartMatrix.MatrixController), (0, _chartjsChartMatrix.MatrixElement));
+Chart.register((0, _chartjsChartMatrix.MatrixController), (0, _chartjsChartMatrix.MatrixElement));
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/pronoun_grid_data.csv');
     const csvText = await response.text();
@@ -698,10 +697,10 @@ async function renderPronounGridChart() {
             }
         }
     };
-    new (0, _chartJs.Chart)(document.getElementById('pronoun-grid-chart'), config);
+    new Chart(document.getElementById('pronoun-grid-chart'), config);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","chartjs-chart-matrix":"7Kn2D","chart.js":"ipU8D"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","chartjs-chart-matrix":"7Kn2D"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -14572,8 +14571,6 @@ var _color = require("@kurkle/color");
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCountryChart", ()=>renderCountryChart);
-var _auto = require("chart.js/auto");
-var _autoDefault = parcelHelpers.interopDefault(_auto);
 "use strict";
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');
@@ -14610,7 +14607,7 @@ async function renderCountryChart() {
     chartWrapper.appendChild(canvas);
     container.appendChild(chartWrapper);
     const ctx = canvas.getContext('2d');
-    new (0, _autoDefault.default)(ctx, {
+    new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: [
@@ -14663,20 +14660,10 @@ async function renderCountryChart() {
     });
 }
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d8NN9":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _chartJs = require("../dist/chart.js");
-parcelHelpers.exportAll(_chartJs, exports);
-(0, _chartJs.Chart).register(...(0, _chartJs.registerables));
-exports.default = (0, _chartJs.Chart);
-
-},{"../dist/chart.js":"ipU8D","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"03968":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"03968":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderGenreChart", ()=>renderGenreChart);
-var _auto = require("chart.js/auto");
-var _autoDefault = parcelHelpers.interopDefault(_auto);
 "use strict";
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/top5-genre-data.csv');
@@ -14715,7 +14702,7 @@ async function renderGenreChart() {
         }
     ];
     const ctx = document.getElementById('top5-genre-chart').getContext('2d');
-    new (0, _autoDefault.default)(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -14770,12 +14757,10 @@ async function renderGenreChart() {
     });
 }
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iBKsn":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iBKsn":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCompositionChart", ()=>renderCompositionChart);
-var _auto = require("chart.js/auto");
-var _autoDefault = parcelHelpers.interopDefault(_auto);
 "use strict";
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/solo-band-data.csv');
@@ -14802,7 +14787,7 @@ async function renderCompositionChart() {
         }
     ];
     const ctx = document.getElementById('solo-band-chart').getContext('2d');
-    new (0, _autoDefault.default)(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -14852,6 +14837,6 @@ async function renderCompositionChart() {
     });
 }
 
-},{"chart.js/auto":"d8NN9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2glVN","adjPd"], "adjPd", "parcelRequire94c2")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2glVN","adjPd"], "adjPd", "parcelRequire94c2")
 
 //# sourceMappingURL=main.js.map
