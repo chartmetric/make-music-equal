@@ -1,4 +1,5 @@
 "use strict";
+
 import { renderPronounGridChart } from './charts/pronouns_grid.js';
 import { renderCountryChart } from './charts/countries_chart.js';
 import { renderGenreChart } from './charts/genre_chart.js';

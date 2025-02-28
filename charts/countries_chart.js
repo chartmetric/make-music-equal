@@ -1,4 +1,5 @@
 "use strict";
+import Chart from 'chart.js/auto';
 
 async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');

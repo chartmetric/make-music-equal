@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel main.js"  
+    "start": "parcel main.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/ale22arevalo/make-music-equal#readme",
   "dependencies": {
+    "ag-grid-community": "^33.1.1",
+    "chart.js": "^4.4.8",
+    "chartjs-chart-matrix": "^2.0.1",
     "parcel": "^2.13.3"
   }
 }
