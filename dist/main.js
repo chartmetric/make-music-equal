@@ -600,6 +600,7 @@ var _pronounsGridJs = require("./charts/pronouns_grid.js");
 var _countriesChartJs = require("./charts/countries_chart.js");
 var _genreChartJs = require("./charts/genre_chart.js");
 var _compositionChartJs = require("./charts/composition_chart.js");
+var _searchableTableJs = require("./charts/searchable_table.js");
 "use strict";
 window.Webflow ||= [];
 window.Webflow.push(()=>{
@@ -607,9 +608,10 @@ window.Webflow.push(()=>{
     (0, _countriesChartJs.renderCountryChart)();
     (0, _genreChartJs.renderGenreChart)();
     (0, _compositionChartJs.renderCompositionChart)();
+    (0, _searchableTableJs.renderSearchableTable)();
 });
 
-},{"./charts/pronouns_grid.js":"hfRUE","./charts/countries_chart.js":"gMG4g","./charts/genre_chart.js":"03968","./charts/composition_chart.js":"iBKsn"}],"hfRUE":[function(require,module,exports,__globalThis) {
+},{"./charts/pronouns_grid.js":"hfRUE","./charts/countries_chart.js":"gMG4g","./charts/genre_chart.js":"03968","./charts/composition_chart.js":"iBKsn","./charts/searchable_table.js":"hZXvU"}],"hfRUE":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderPronounGridChart", ()=>renderPronounGridChart);
@@ -996,6 +998,74 @@ async function renderCompositionChart() {
             responsive: true
         }
     });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hZXvU":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "renderSearchableTable", ()=>renderSearchableTable);
+"use strict";
+// Fetch Data and Initialize Table
+async function fetchData() {
+    const response = await fetch('https://share.chartmetric.com/make-music-equal/mme-data.csv');
+    const csvText = await response.text();
+    const rows = csvText.trim().split('\n');
+    const headers = rows[0].split(',');
+    const data = rows.slice(1).map((row)=>{
+        const values = row.split(',');
+        return {
+            artist_name: values[1].trim(),
+            chartmetric_url: values[2].trim(),
+            country_name: values[3].trim(),
+            pronouns: values[4].trim(),
+            is_band: values[5].trim(),
+            genre: values[6].trim()
+        };
+    });
+    return data;
+}
+async function renderSearchableTable() {
+    const data = await fetchData();
+    const gridOptions = {
+        rowData: data,
+        columnDefs: [
+            {
+                headerName: "Artist",
+                field: "artist_name",
+                cellRenderer: (params)=>`<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>`
+            },
+            {
+                headerName: "Country",
+                field: "country_name"
+            },
+            {
+                headerName: "Pronouns",
+                field: "pronouns"
+            },
+            {
+                headerName: "Composition",
+                field: "is_band"
+            },
+            {
+                headerName: "Genre",
+                field: "genre"
+            }
+        ],
+        defaultColDef: {
+            flex: 1,
+            minWidth: 150,
+            sortable: true,
+            filter: true
+        }
+    };
+    // Ensure the grid container exists
+    const tableElement = document.querySelector("#searchable-table");
+    if (!tableElement) {
+        console.error("Table container not found!");
+        return;
+    }
+    // Initialize the table
+    agGrid.createGrid(tableElement, gridOptions);
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2glVN","adjPd"], "adjPd", "parcelRequire94c2")

@@ -4,6 +4,7 @@ import { renderPronounGridChart } from './charts/pronouns_grid.js';
 import { renderCountryChart } from './charts/countries_chart.js';
 import { renderGenreChart } from './charts/genre_chart.js';
 import { renderCompositionChart } from './charts/composition_chart.js';
+import {renderSearchableTable} from './charts/searchable_table.js';
 
 window.Webflow ||= [];window.Webflow.push(() => {  
 
@@ -11,5 +12,6 @@ window.Webflow ||= [];window.Webflow.push(() => {
 	renderCountryChart();
 	renderGenreChart();
 	renderCompositionChart();
+	renderSearchableTable();
 	
 });
