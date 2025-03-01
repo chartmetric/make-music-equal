@@ -847,24 +847,29 @@ async function fetchData() {
 async function renderGenreChart() {
     const data = await fetchData();
     const labels = data.map((row)=>row.genre);
+    const ctx = document.getElementById('top5-genre-chart').getContext('2d');
+    ctx.canvas.height = 400;
+    ctx.canvas.width = 400;
+    const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
+    orangeGr.addColorStop(0, '#F0899A'); // Start color
+    orangeGr.addColorStop(1, '#EEC23F'); // End color
     const datasets = [
         {
             label: 'he/him',
             data: data.map((row)=>row.he_him),
-            backgroundColor: 'rgba(236, 68, 6, 0.8)'
+            backgroundColor: orangeGr
         },
         {
             label: 'she/her',
             data: data.map((row)=>row.she_her),
-            backgroundColor: 'rgba(91, 188, 169, 0.8)'
+            backgroundColor: '#C0E7F4'
         },
         {
             label: 'they/them',
             data: data.map((row)=>row.they_them),
-            backgroundColor: 'rgba(153, 102, 255, 0.8)'
+            backgroundColor: '#B7A7F9'
         }
     ];
-    const ctx = document.getElementById('top5-genre-chart').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -902,7 +907,6 @@ async function renderGenreChart() {
             indexAxis: 'y',
             scales: {
                 x: {
-                    display: true,
                     stacked: true,
                     ticks: {
                         callback: function(value) {
@@ -910,10 +914,21 @@ async function renderGenreChart() {
                             else if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
                             return value;
                         }
+                    },
+                    grid: {
+                        display: true
                     }
                 },
                 y: {
-                    stacked: true
+                    stacked: true,
+                    ticks: {
+                        callback: function(index) {
+                            return labels[index];
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
                 }
             }
         }
@@ -942,14 +957,19 @@ async function fetchData() {
 async function renderCompositionChart() {
     const data = await fetchData();
     const labels = data.map((row)=>row.country_name);
+    const ctx = document.getElementById('solo-band-chart').getContext('2d');
+    ctx.canvas.height = 400;
+    ctx.canvas.width = 400;
+    const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
+    orangeGr.addColorStop(0, '#F0899A'); // Start color
+    orangeGr.addColorStop(1, '#EEC23F'); // End color
     const datasets = [
         {
             label: 'is_band',
             data: data.map((row)=>row.is_band),
-            backgroundColor: 'rgba(75, 192, 192, 0.8)'
+            backgroundColor: orangeGr
         }
     ];
-    const ctx = document.getElementById('solo-band-chart').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -981,7 +1001,10 @@ async function renderCompositionChart() {
                     display: true,
                     stacked: false,
                     barPercentage: 1,
-                    categoryPercentage: 1
+                    categoryPercentage: 1,
+                    grid: {
+                        display: false
+                    }
                 },
                 y: {
                     display: true,
@@ -1060,10 +1083,6 @@ async function renderSearchableTable() {
     };
     // Ensure the grid container exists
     const tableElement = document.querySelector("#searchable-table");
-    if (!tableElement) {
-        console.error("Table container not found!");
-        return;
-    }
     // Initialize the table
     agGrid.createGrid(tableElement, gridOptions);
 }

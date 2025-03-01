@@ -39,10 +39,6 @@ export async function renderSearchableTable() {
 
   // Ensure the grid container exists
   const tableElement = document.querySelector("#searchable-table");
-  if (!tableElement) {
-    console.error("Table container not found!");
-    return;
-  }
 
   // Initialize the table
   agGrid.createGrid(tableElement, gridOptions);
