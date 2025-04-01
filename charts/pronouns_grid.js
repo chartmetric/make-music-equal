@@ -18,10 +18,10 @@ async function fetchData() {
 
 function getColor(point) {
   switch (point) {
-    case 'he/him': return 'rgba(236, 68, 6, 0.8)';
-    case 'she/her': return 'rgba(91, 188, 169, 0.8)';
-    case 'they/them': return 'rgba(153, 102, 255, 0.8)';
-    default: return 'rgba(201, 203, 207, 0.8)';
+    case 'he/him': return '#C0E7F4';
+    case 'she/her': return '#F0899A';
+    case 'they/them': return '#B7A7F9';
+    default: return '#CECECE';
   }
 }
 

@@ -28,7 +28,15 @@ export async function renderSearchableTable() {
   const gridOptions = {
     rowData: data,
     columnDefs: [
-      { headerName: "Artist", field: "artist_name", cellRenderer: params => `<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>` },
+      { headerName: "Artist", field: "artist_name", 
+        cellRenderer: params => {
+          const link = document.createElement("a");
+          link.href = params.data.chartmetric_url;
+          link.target = "_blank";
+          link.textContent = params.value;
+          return link;
+        }},
+        // cellRenderer: params => `<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>` },
       { headerName: "Country", field: "country_name" },
       { headerName: "Pronouns", field: "pronouns" },
       { headerName: "Composition", field: "is_band" },
@@ -36,6 +44,31 @@ export async function renderSearchableTable() {
     ],
     defaultColDef: { flex: 1, minWidth: 150, sortable: true, filter: true }
   };
+
+  const style = document.createElement("style");
+  style.innerHTML = `
+    /* Remove text decoration from links */
+    .ag-cell a {
+      color: inherit;
+    }
+    
+    .ag-cell a:hover {
+        font-weight: bold;
+      }
+
+    /* Bold headers */
+    .ag-header-cell {
+      font-weight: bold;
+    }
+
+    /* Highlight rows on hover */
+    .ag-row:hover {
+      background-color: #C0E7F4 !important;
+    }
+
+    overscroll-behavior: contain;
+  `;
+  document.head.appendChild(style);
 
   // Ensure the grid container exists
   const tableElement = document.querySelector("#searchable-table");

@@ -54,9 +54,9 @@ export async function renderCountryChart() {
             datasets: [{
                 data: [countryData.he_him, countryData.she_her, countryData.they_them],
                 backgroundColor: [
-                    'rgba(236, 68, 6, 0.8)',
-                    'rgba(91, 188, 169, 0.8)',
-                    'rgba(153, 102, 255, 0.8)'
+                    '#C0E7F4',
+                    '#F0899A',
+                    '#B7A7F9'
                 ],
                 borderWidth: 1
             }]

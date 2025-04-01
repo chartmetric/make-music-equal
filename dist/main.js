@@ -601,6 +601,7 @@ var _countriesChartJs = require("./charts/countries_chart.js");
 var _genreChartJs = require("./charts/genre_chart.js");
 var _compositionChartJs = require("./charts/composition_chart.js");
 var _searchableTableJs = require("./charts/searchable_table.js");
+var _hmcCarouselJs = require("./components/hmc_carousel.js");
 "use strict";
 window.Webflow ||= [];
 window.Webflow.push(()=>{
@@ -609,9 +610,10 @@ window.Webflow.push(()=>{
     (0, _genreChartJs.renderGenreChart)();
     (0, _compositionChartJs.renderCompositionChart)();
     (0, _searchableTableJs.renderSearchableTable)();
+    (0, _hmcCarouselJs.renderCarousel)();
 });
 
-},{"./charts/pronouns_grid.js":"hfRUE","./charts/countries_chart.js":"gMG4g","./charts/genre_chart.js":"03968","./charts/composition_chart.js":"iBKsn","./charts/searchable_table.js":"hZXvU"}],"hfRUE":[function(require,module,exports,__globalThis) {
+},{"./charts/pronouns_grid.js":"hfRUE","./charts/countries_chart.js":"gMG4g","./charts/genre_chart.js":"03968","./charts/composition_chart.js":"iBKsn","./charts/searchable_table.js":"hZXvU","./components/hmc_carousel.js":"i3uP2"}],"hfRUE":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderPronounGridChart", ()=>renderPronounGridChart);
@@ -634,13 +636,13 @@ async function fetchData() {
 function getColor(point) {
     switch(point){
         case 'he/him':
-            return 'rgba(236, 68, 6, 0.8)';
+            return '#C0E7F4';
         case 'she/her':
-            return 'rgba(91, 188, 169, 0.8)';
+            return '#F0899A';
         case 'they/them':
-            return 'rgba(153, 102, 255, 0.8)';
+            return '#B7A7F9';
         default:
-            return 'rgba(201, 203, 207, 0.8)';
+            return '#CECECE';
     }
 }
 async function renderPronounGridChart() {
@@ -786,9 +788,9 @@ async function renderCountryChart() {
                         countryData.they_them
                     ],
                     backgroundColor: [
-                        'rgba(236, 68, 6, 0.8)',
-                        'rgba(91, 188, 169, 0.8)',
-                        'rgba(153, 102, 255, 0.8)'
+                        '#C0E7F4',
+                        '#F0899A',
+                        '#B7A7F9'
                     ],
                     borderWidth: 1
                 }
@@ -1055,8 +1057,15 @@ async function renderSearchableTable() {
             {
                 headerName: "Artist",
                 field: "artist_name",
-                cellRenderer: (params)=>`<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>`
+                cellRenderer: (params)=>{
+                    const link = document.createElement("a");
+                    link.href = params.data.chartmetric_url;
+                    link.target = "_blank";
+                    link.textContent = params.value;
+                    return link;
+                }
             },
+            // cellRenderer: params => `<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>` },
             {
                 headerName: "Country",
                 field: "country_name"
@@ -1081,10 +1090,150 @@ async function renderSearchableTable() {
             filter: true
         }
     };
+    const style = document.createElement("style");
+    style.innerHTML = `
+    /* Remove text decoration from links */
+    .ag-cell a {
+      color: inherit;
+    }
+    
+    .ag-cell a:hover {
+        font-weight: bold;
+      }
+
+    /* Bold headers */
+    .ag-header-cell {
+      font-weight: bold;
+    }
+
+    /* Highlight rows on hover */
+    .ag-row:hover {
+      background-color: #C0E7F4 !important;
+    }
+
+    overscroll-behavior: contain;
+  `;
+    document.head.appendChild(style);
     // Ensure the grid container exists
     const tableElement = document.querySelector("#searchable-table");
     // Initialize the table
     agGrid.createGrid(tableElement, gridOptions);
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i3uP2":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "renderCarousel", ()=>renderCarousel);
+"use strict";
+async function fetchData() {
+    const response = await fetch('https://share.chartmetric.com/make-music-equal/hmc-articles.csv');
+    const csvText = await response.text();
+    const rows = csvText.trim().split('\n');
+    const data = rows.slice(1).map((row)=>{
+        const values = row.split(',');
+        return {
+            image_url: values[0].trim(),
+            name: values[1].trim(),
+            published_at: new Date(values[2].trim()).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            }),
+            url: values[3].trim(),
+            tag_name: values[4].trim()
+        };
+    });
+    return data;
+}
+async function renderCarousel() {
+    const data = await fetchData();
+    const carousel = document.getElementById('hmc-articles-carousel');
+    carousel.style.display = 'flex';
+    carousel.style.overflowX = 'auto';
+    carousel.style.scrollSnapType = 'x mandatory';
+    carousel.style.scrollBehavior = 'smooth';
+    carousel.style.gap = '10px';
+    carousel.style.whiteSpace = 'nowrap';
+    carousel.style.scrollbarWidth = 'none'; // Hide scrollbar for Firefox
+    carousel.style.msOverflowStyle = 'none'; // Hide scrollbar for IE/Edge
+    carousel.style.alignItems = 'flex-start'; // Aligns items properly
+    carousel.style.justifyContent = 'flex-start'; // Ensures no extra space at start
+    carousel.style.padding = '10px 0 10px 10px'; // Left padding to prevent cut-off
+    // Hide scrollbar for WebKit browsers (Chrome, Safari)
+    const style = document.createElement('style');
+    style.innerHTML = `
+        #hmc-articles-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 300px; /* Fixed width */
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background-color: #fff;
+            scroll-snap-align: start;
+            text-align: center;
+            overflow:hidden;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px 8px 0 0;
+        }
+        .carousel-text {
+            padding: 5px 10px;
+            font-size: 14px;
+            width: 300px; /* Fixed width */
+            overflow-wrap: break-word;
+        }
+        .carousel-title {
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            overflow-wrap: break-word;
+        }
+        .carousel-date {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #555;
+        }
+    `;
+    document.head.appendChild(style);
+    // Populate the carousel with items
+    data.forEach((article)=>{
+        const articleLink = document.createElement('a');
+        articleLink.href = article.url;
+        articleLink.target = "_blank"; // Opens in new tab
+        articleLink.rel = "noopener noreferrer"; // Security best practice
+        articleLink.style.textDecoration = 'none';
+        articleLink.style.color = 'inherit';
+        const articleDiv = document.createElement('div');
+        articleDiv.classList.add('carousel-item');
+        const articleImage = document.createElement('img');
+        articleImage.src = article.image_url;
+        articleImage.alt = article.name;
+        const textContainer = document.createElement('div');
+        textContainer.classList.add('carousel-text');
+        const articleName = document.createElement('p');
+        articleName.classList.add('carousel-title');
+        articleName.textContent = article.name;
+        const articlePublishedAt = document.createElement('p');
+        articlePublishedAt.classList.add('carousel-date');
+        articlePublishedAt.textContent = article.published_at;
+        textContainer.appendChild(articleName);
+        textContainer.appendChild(articlePublishedAt);
+        articleDiv.appendChild(articleImage);
+        articleDiv.appendChild(textContainer);
+        articleLink.appendChild(articleDiv);
+        carousel.appendChild(articleLink);
+    });
+    // Ensure the first item is fully visible
+    carousel.scrollLeft = 0;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2glVN","adjPd"], "adjPd", "parcelRequire94c2")
