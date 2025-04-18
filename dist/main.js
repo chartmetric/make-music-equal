@@ -1160,31 +1160,36 @@ async function renderCarousel() {
             width: 300px;
             height: 200px;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
             scroll-snap-align: start;
             text-align: center;
             overflow:hidden;
+            padding: 1rem;
         }
         .carousel-text {
-            padding: 5px 10px;
-            font-size: 14px;
             word-wrap: break-word;
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Helvetica Neue, sans-serif;
+            text-align: left;
         }
         .carousel-title {
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 1.2rem;
+            line-height: 1.5rem;
+            background: linear-gradient(225deg, #4D8BB6 0%, #53A751 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .carousel-date {
-            margin: 5px 0;
-            font-size: 12px;
+            margin: 1rem 0;
+            font-size: 1rem;
             color: #555;
         }
     `;
@@ -1217,8 +1222,6 @@ async function renderCarousel() {
         articleLink.appendChild(articleDiv);
         carousel.appendChild(articleLink);
     });
-    // Ensure the first item is fully visible
-    carousel.scrollLeft = 0;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["2glVN","adjPd"], "adjPd", "parcelRequire94c2")
