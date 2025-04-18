@@ -622,7 +622,6 @@ async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/pronoun_grid_data.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',');
     const data = rows.slice(1).map((row)=>{
         const values = row.split(',');
         return {
@@ -700,6 +699,7 @@ async function renderPronounGridChart() {
         }
     };
     new Chart(document.getElementById('pronoun-grid-chart'), config);
+    new Chart(document.getElementById('modal-pronoun-grid-chart'), config);
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports,__globalThis) {
@@ -741,7 +741,6 @@ async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',').map((header)=>header.trim());
     if (rows.length < 2) return []; // Return empty array if no data is available
     const values = rows[1].split(',').map((value)=>value.trim());
     const data = [
@@ -762,8 +761,8 @@ async function renderCountryChart() {
     // Create a canvas for the country
     const canvas = document.createElement('canvas');
     canvas.id = `doughnut-chart-0`;
-    canvas.style.width = '250px';
-    canvas.style.height = '250px';
+    canvas.style.width = '300px';
+    canvas.style.height = '300px';
     // Append canvas to container
     const chartWrapper = document.createElement('div');
     chartWrapper.style.display = 'flex';
@@ -811,13 +810,6 @@ async function renderCountryChart() {
                             return `${value} artists`;
                         }
                     }
-                },
-                title: {
-                    display: true,
-                    text: countryData.country_name,
-                    font: {
-                        size: 16
-                    }
                 }
             },
             cutout: '40%' // Adjusts the size of the doughnut hole
@@ -834,7 +826,6 @@ async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/top5-genre-data.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',');
     const data = rows.slice(1).map((row)=>{
         const values = row.split(',');
         return {
@@ -850,8 +841,8 @@ async function renderGenreChart() {
     const data = await fetchData();
     const labels = data.map((row)=>row.genre);
     const ctx = document.getElementById('top5-genre-chart').getContext('2d');
-    ctx.canvas.height = 400;
-    ctx.canvas.width = 400;
+    ctx.canvas.height = 300;
+    ctx.canvas.width = 300;
     const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
     orangeGr.addColorStop(0, '#F0899A'); // Start color
     orangeGr.addColorStop(1, '#EEC23F'); // End color
@@ -960,8 +951,8 @@ async function renderCompositionChart() {
     const data = await fetchData();
     const labels = data.map((row)=>row.country_name);
     const ctx = document.getElementById('solo-band-chart').getContext('2d');
-    ctx.canvas.height = 400;
-    ctx.canvas.width = 400;
+    ctx.canvas.height = 300;
+    ctx.canvas.width = 300;
     const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
     orangeGr.addColorStop(0, '#F0899A'); // Start color
     orangeGr.addColorStop(1, '#EEC23F'); // End color
@@ -1032,10 +1023,9 @@ parcelHelpers.export(exports, "renderSearchableTable", ()=>renderSearchableTable
 "use strict";
 // Fetch Data and Initialize Table
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/mme-data.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme-data.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',');
     const data = rows.slice(1).map((row)=>{
         const values = row.split(',');
         return {
@@ -1053,6 +1043,9 @@ async function renderSearchableTable() {
     const data = await fetchData();
     const gridOptions = {
         rowData: data,
+        pagination: true,
+        paginationPageSize: 50,
+        paginationPageSizeSelector: false,
         columnDefs: [
             {
                 headerName: "Artist",
@@ -1065,7 +1058,6 @@ async function renderSearchableTable() {
                     return link;
                 }
             },
-            // cellRenderer: params => `<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>` },
             {
                 headerName: "Country",
                 field: "country_name"
@@ -1126,21 +1118,19 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCarousel", ()=>renderCarousel);
 "use strict";
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/hmc-articles.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
     const data = rows.slice(1).map((row)=>{
-        const values = row.split(',');
+        const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map((value)=>value.replace(/^"|"$/g, '').trim());
         return {
-            image_url: values[0].trim(),
-            name: values[1].trim(),
-            published_at: new Date(values[2].trim()).toLocaleDateString('en-US', {
+            name: values[1],
+            published_at: new Date(values[2]).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric'
             }),
-            url: values[3].trim(),
-            tag_name: values[4].trim()
+            url: values[3]
         };
     });
     return data;
@@ -1167,12 +1157,12 @@ async function renderCarousel() {
         }
         .carousel-item {
             flex: 0 0 auto;
-            width: 300px; /* Fixed width */
-            height: 400px;
+            width: 300px;
+            height: 200px;
             display: flex;
+            justify-content: center;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
@@ -1180,22 +1170,17 @@ async function renderCarousel() {
             text-align: center;
             overflow:hidden;
         }
-        .carousel-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px 8px 0 0;
-        }
         .carousel-text {
             padding: 5px 10px;
             font-size: 14px;
-            width: 300px; /* Fixed width */
-            overflow-wrap: break-word;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: Helvetica Neue, sans-serif;
         }
         .carousel-title {
             font-weight: bold;
-            width: 100%;
             margin-top: 10px;
-            overflow-wrap: break-word;
         }
         .carousel-date {
             margin: 5px 0;
@@ -1214,9 +1199,9 @@ async function renderCarousel() {
         articleLink.style.color = 'inherit';
         const articleDiv = document.createElement('div');
         articleDiv.classList.add('carousel-item');
-        const articleImage = document.createElement('img');
-        articleImage.src = article.image_url;
-        articleImage.alt = article.name;
+        // const articleImage = document.createElement('img');
+        // articleImage.src = article.image_url;
+        // articleImage.alt = article.name;
         const textContainer = document.createElement('div');
         textContainer.classList.add('carousel-text');
         const articleName = document.createElement('p');
@@ -1227,7 +1212,7 @@ async function renderCarousel() {
         articlePublishedAt.textContent = article.published_at;
         textContainer.appendChild(articleName);
         textContainer.appendChild(articlePublishedAt);
-        articleDiv.appendChild(articleImage);
+        // articleDiv.appendChild(articleImage);
         articleDiv.appendChild(textContainer);
         articleLink.appendChild(articleDiv);
         carousel.appendChild(articleLink);

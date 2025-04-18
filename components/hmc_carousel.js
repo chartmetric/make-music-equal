@@ -1,18 +1,16 @@
 "use strict";
 
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/hmc-articles.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
 
     const data = rows.slice(1).map(row => {
-        const values = row.split(',');
+        const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(value => value.replace(/^"|"$/g, '').trim());
         return {
-            image_url: values[0].trim(),
-            name: values[1].trim(),
-            published_at: new Date(values[2].trim()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            url: values[3].trim(),
-            tag_name: values[4].trim(),
+            name: values[1],
+            published_at: new Date(values[2]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+            url: values[3],
         };
     });
 
@@ -43,12 +41,12 @@ export async function renderCarousel() {
         }
         .carousel-item {
             flex: 0 0 auto;
-            width: 300px; /* Fixed width */
-            height: 400px;
+            width: 300px;
+            height: 200px;
             display: flex;
+            justify-content: center;
             flex-direction: column;
             align-items: center;
-            padding: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
@@ -56,22 +54,17 @@ export async function renderCarousel() {
             text-align: center;
             overflow:hidden;
         }
-        .carousel-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px 8px 0 0;
-        }
         .carousel-text {
             padding: 5px 10px;
             font-size: 14px;
-            width: 300px; /* Fixed width */
-            overflow-wrap: break-word;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: Helvetica Neue, sans-serif;
         }
         .carousel-title {
             font-weight: bold;
-            width: 100%;
             margin-top: 10px;
-            overflow-wrap: break-word;
         }
         .carousel-date {
             margin: 5px 0;
@@ -93,10 +86,10 @@ export async function renderCarousel() {
         const articleDiv = document.createElement('div');
         articleDiv.classList.add('carousel-item');
 
-        const articleImage = document.createElement('img');
-        articleImage.src = article.image_url;
-        articleImage.alt = article.name;
-
+        // const articleImage = document.createElement('img');
+        // articleImage.src = article.image_url;
+        // articleImage.alt = article.name;
+        
         const textContainer = document.createElement('div');
         textContainer.classList.add('carousel-text');
 
@@ -111,7 +104,7 @@ export async function renderCarousel() {
         textContainer.appendChild(articleName);
         textContainer.appendChild(articlePublishedAt);
 
-        articleDiv.appendChild(articleImage);
+        // articleDiv.appendChild(articleImage);
         articleDiv.appendChild(textContainer);
         articleLink.appendChild(articleDiv);
         carousel.appendChild(articleLink);

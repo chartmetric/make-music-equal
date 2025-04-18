@@ -5,7 +5,6 @@ async function fetchData() {
     const response = await fetch('https://share.chartmetric.com/make-music-equal/top5-genre-data.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',');
 
     const data = rows.slice(1).map(row => {
         const values = row.split(',');
@@ -26,8 +25,8 @@ export async function renderGenreChart() {
     const labels = data.map(row => row.genre); 
 
     const ctx = document.getElementById('top5-genre-chart').getContext('2d')
-    ctx.canvas.height = 400;
-    ctx.canvas.width = 400;
+    ctx.canvas.height = 300;
+    ctx.canvas.width = 300;
 
     const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
     orangeGr.addColorStop(0, '#F0899A'); // Start color

@@ -4,7 +4,6 @@ async function fetchData() {
   const response = await fetch('https://share.chartmetric.com/make-music-equal/pronoun_grid_data.csv');
   const csvText = await response.text();
   const rows = csvText.trim().split('\n');
-  const headers = rows[0].split(',');
   const data = rows.slice(1).map(row => {
     const values = row.split(',');
     return {
@@ -83,4 +82,9 @@ export async function renderPronounGridChart() {
     document.getElementById('pronoun-grid-chart'),
     config
   );
+
+  new Chart(
+    document.getElementById('modal-pronoun-grid-chart'),
+    config
+  )
 }

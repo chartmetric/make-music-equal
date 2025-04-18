@@ -2,10 +2,9 @@
 
 // Fetch Data and Initialize Table
 async function fetchData() {
-  const response = await fetch('https://share.chartmetric.com/make-music-equal/mme-data.csv');
+  const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme-data.csv');
   const csvText = await response.text();
   const rows = csvText.trim().split('\n');
-  const headers = rows[0].split(',');
 
   const data = rows.slice(1).map(row => {
     const values = row.split(',');
@@ -27,6 +26,9 @@ export async function renderSearchableTable() {
 
   const gridOptions = {
     rowData: data,
+    pagination: true,
+    paginationPageSize: 50,
+    paginationPageSizeSelector: false,
     columnDefs: [
       { headerName: "Artist", field: "artist_name", 
         cellRenderer: params => {
@@ -36,7 +38,6 @@ export async function renderSearchableTable() {
           link.textContent = params.value;
           return link;
         }},
-        // cellRenderer: params => `<a href="${params.data.chartmetric_url}" target="_blank">${params.value}</a>` },
       { headerName: "Country", field: "country_name" },
       { headerName: "Pronouns", field: "pronouns" },
       { headerName: "Composition", field: "is_band" },

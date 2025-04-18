@@ -5,7 +5,6 @@ async function fetchData() {
     const csvText = await response.text();
 
     const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',').map(header => header.trim());
 
     if (rows.length < 2) {
         return []; // Return empty array if no data is available
@@ -34,8 +33,8 @@ export async function renderCountryChart() {
     // Create a canvas for the country
     const canvas = document.createElement('canvas');
     canvas.id = `doughnut-chart-0`;
-    canvas.style.width = '250px';
-    canvas.style.height = '250px';
+    canvas.style.width = '300px';
+    canvas.style.height = '300px';
 
     // Append canvas to container
     const chartWrapper = document.createElement('div');
@@ -78,13 +77,6 @@ export async function renderCountryChart() {
                             }
                             return `${value} artists`
                         }
-                    }
-                },
-                title: {
-                    display: true,
-                    text: countryData.country_name,
-                    font: {
-                        size: 16
                     }
                 }
             },

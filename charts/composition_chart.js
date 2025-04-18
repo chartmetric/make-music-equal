@@ -22,8 +22,8 @@ export async function renderCompositionChart() {
     const labels = data.map(row => row.country_name);
 
     const ctx = document.getElementById('solo-band-chart').getContext('2d');
-    ctx.canvas.height = 400;
-    ctx.canvas.width = 400;
+    ctx.canvas.height = 300;
+    ctx.canvas.width = 300;
 
     const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
     orangeGr.addColorStop(0, '#F0899A'); // Start color
