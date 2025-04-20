@@ -64,8 +64,8 @@ export async function renderCarousel() {
         }
         .carousel-title {
             font-weight: bold;
-            font-size: 1.2rem;
-            line-height: 1.5rem;
+            font-size: 1rem;
+            line-height: 1rem;
             background: linear-gradient(225deg, #4D8BB6 0%, #53A751 100%);
             background-clip: text;
             -webkit-background-clip: text;
