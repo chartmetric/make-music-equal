@@ -1,7 +1,5 @@
 "use strict";
 
-import { Legend } from "chart.js";
-
 async function fetchData() {
     const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/career-breakdown.csv');
     const csvText = await response.text();
