@@ -1,0 +1,205 @@
+"use strict";
+
+async function fetchData() {
+    const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');
+    const csvText = await response.text();
+
+    const rows = csvText.trim().split('\n');
+
+    if (rows.length < 2) {
+        return []; // Return empty array if no data is available
+    }
+
+    const headers = rows[0].split(',').map(header => header.trim());
+    const data = rows.slice(1).map(row => {
+        const values = row.split(',').map(value => value.trim());
+        return {
+            country_name: values[0],
+            he_him: Number(values[1]) || 0,
+            she_her: Number(values[2]) || 0,
+            they_them: Number(values[3]) || 0
+        };
+    });
+
+    return data;
+}
+
+export async function renderCountriesChart() {
+    const data = await fetchData();
+    if (data.length === 0) {
+        return; // No data to render
+    }
+
+    const container = document.getElementById('searchable-countries-container');
+
+    // Create a wrapper for the search input and dropdown
+    const searchWrapper = document.createElement('div');
+    searchWrapper.style.position = 'relative';
+    searchWrapper.style.marginBottom = '20px';
+
+    // Create an input field for searching
+    const input = document.createElement('input');
+    input.id = 'country-search';
+    input.placeholder = 'Search for a country...';
+    input.style.width = '100%';
+    input.style.padding = '0.5rem';
+    input.style.border = '1px solid #D8D8D8';
+    input.style.borderRadius = '5px';
+    input.style.boxSizing = 'border-box';
+    input.style.lineHeight = '1.5'
+    input.style.setProperty('--webkit-input-placeholder', 'line-height: 1.5;');
+
+    // Set the initial value of the input to the first country's name
+    input.value = data[0].country_name;
+
+    input.addEventListener('click', () => {
+        updateDropdown('');
+        dropdown.style.display = 'block';
+    });
+
+    // Create a dropdown container for the options
+    const dropdown = document.createElement('div');
+    dropdown.id = 'country-dropdown';
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = '100%';
+    dropdown.style.left = '0';
+    dropdown.style.width = '100%';
+    dropdown.style.border = '1px solid #D8D8D8';
+    dropdown.style.borderRadius = '5px';
+    dropdown.style.backgroundColor = '#FFFFFF';
+    dropdown.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+    dropdown.style.zIndex = '1000';
+    dropdown.style.maxHeight = '200px';
+    dropdown.style.overflowY = 'auto';
+    dropdown.style.display = 'none';
+    dropdown.style.lineHeight = '1.5';
+
+    // Append input and dropdown to the wrapper
+    searchWrapper.appendChild(input);
+    searchWrapper.appendChild(dropdown);
+
+    // Append the wrapper to the container
+    container.appendChild(searchWrapper);
+
+    // Populate dropdown with country names
+    const updateDropdown = (filter) => {
+        dropdown.innerHTML = ''; // Clear previous options
+        const filteredData = data
+            .filter(countryData =>
+                countryData.country_name.toLowerCase().includes(filter.toLowerCase())
+            )
+            .sort((a, b) => a.country_name.localeCompare(b.country_name)); // Sort alphabetically
+
+        filteredData.forEach((countryData, index) => {
+            const option = document.createElement('div');
+            option.textContent = countryData.country_name;
+            option.style.padding = '0.5rem';
+            option.style.cursor = 'pointer';
+            option.style.borderBottom = '1px solid #F0F0F0';
+            option.style.backgroundColor = '#FFFFFF';
+
+            option.addEventListener('mouseover', () => {
+                option.style.backgroundColor = '#F5F5F5';
+            });
+
+            option.addEventListener('mouseout', () => {
+                option.style.backgroundColor = '#FFFFFF';
+            });
+
+            option.addEventListener('click', () => {
+                input.value = countryData.country_name;
+                dropdown.style.display = 'none';
+                renderChart(index);
+            });
+
+            dropdown.appendChild(option);
+        });
+
+        dropdown.style.display = filteredData.length > 0 ? 'block' : 'none';
+    };
+
+    // Update dropdown on input
+    input.addEventListener('input', () => {
+        updateDropdown(input.value);
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!searchWrapper.contains(event.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    // Function to render chart for selected country
+    const renderChart = (countryIndex) => {
+        const countryData = data[countryIndex];
+
+        // Remove existing chart if any
+        const existingCanvas = document.getElementById('searchable-donut');
+        if (existingCanvas) {
+            existingCanvas.remove();
+        }
+
+        // Create a canvas for the country
+        const canvas = document.createElement('canvas');
+        canvas.id = `searchable-donut`;
+        canvas.style.width = '300px';
+        canvas.style.height = '300px';
+
+        // Append canvas to container
+        const chartWrapper = document.createElement('div');
+        chartWrapper.style.display = 'flex';
+        chartWrapper.style.flexDirection = 'column';
+        chartWrapper.style.alignItems = 'center';
+        chartWrapper.appendChild(canvas);
+        container.appendChild(chartWrapper);
+
+        const ctx = canvas.getContext('2d');
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['he/him', 'she/her', 'they/them'],
+                datasets: [{
+                    data: [countryData.he_him, countryData.she_her, countryData.they_them],
+                    backgroundColor: [
+                        '#C0E7F4',
+                        '#F0899A',
+                        '#B7A7F9'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => {
+                                let value = context.raw;
+                                if (value >= 1000000) {
+                                    value = (value / 1000000).toFixed(1) + 'm';
+                                } else if (value >= 1000) {
+                                    value = (value / 1000).toFixed(1) + 'k';
+                                }
+                                return `${value} artists`
+                            }
+                        }
+                    }
+                },
+                cutout: '40%' // Adjusts the size of the doughnut hole
+            }
+        });
+    };
+
+    // Initial render for the first country
+    renderChart(0);
+
+    // Update chart on dropdown change
+    dropdown.addEventListener('change', (event) => {
+        renderChart(event.target.value);
+    });
+}
