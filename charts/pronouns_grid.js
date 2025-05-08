@@ -1,7 +1,7 @@
 "use strict";
 
 async function fetchData() {
-  const response = await fetch('https://share.chartmetric.com/make-music-equal/pronoun_grid_data.csv');
+  const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/pronoun_grid_data.csv');
   const csvText = await response.text();
   const rows = csvText.trim().split('\n');
   const data = rows.slice(1).map(row => {

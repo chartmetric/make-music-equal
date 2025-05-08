@@ -1,6 +1,6 @@
 "use strict";
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/composition-breakdown.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/composition-breakdown.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
     const headers = rows[0].split(',');

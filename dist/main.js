@@ -623,7 +623,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCountryChart", ()=>renderCountryChart);
 "use strict";
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
     if (rows.length < 2) return []; // Return empty array if no data is available
@@ -1170,7 +1170,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCountriesChart", ()=>renderCountriesChart);
 "use strict";
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/country-breakdown.csv');
+    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
     if (rows.length < 2) return []; // Return empty array if no data is available
