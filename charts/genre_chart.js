@@ -2,7 +2,7 @@
 
 
 async function fetchData() {
-    const response = await fetch('https://share.chartmetric.com/make-music-equal/top5-genre-data.csv');
+    const response = await fetch('https://share.chartmetric.com/make-music-equal/genre-breakdown.csv');
     const csvText = await response.text();
     const rows = csvText.trim().split('\n');
 
@@ -14,7 +14,7 @@ async function fetchData() {
             she_her: Number(values[2].trim()) || 0,
             they_them: Number(values[3].trim()) || 0
         };
-    });
+    }).slice(0, 3); // Limit to the first 3 data points
 
     return data;
 }

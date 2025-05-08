@@ -1,6 +1,7 @@
 "use strict";
 
-import { renderPronounGridChart } from './charts/pronouns_grid.js';
+// import { renderPronounGridChart } from './charts/pronouns_grid.js';
+import {renderCareerChart} from './charts/career_chart.js';
 import { renderCountryChart } from './charts/countries_chart.js';
 import { renderGenreChart } from './charts/genre_chart.js';
 import { renderCompositionChart } from './charts/composition_chart.js';
@@ -10,7 +11,8 @@ import {renderCountriesChart} from './charts/searchable_countries_chart.js'
 
 window.Webflow ||= [];window.Webflow.push(() => {  
 
-	renderPronounGridChart();
+	// renderPronounGridChart();
+	renderCareerChart();
 	renderCountryChart();
 	renderGenreChart();
 	renderCompositionChart();

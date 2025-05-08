@@ -156,6 +156,10 @@ export async function renderCountriesChart() {
 
         const ctx = canvas.getContext('2d');
 
+        const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
+        orangeGr.addColorStop(0, '#F0899A'); // Start color
+        orangeGr.addColorStop(1, '#EEC23F'); // End color
+        
         new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -163,8 +167,8 @@ export async function renderCountriesChart() {
                 datasets: [{
                     data: [countryData.he_him, countryData.she_her, countryData.they_them],
                     backgroundColor: [
+                        orangeGr,
                         '#C0E7F4',
-                        '#F0899A',
                         '#B7A7F9'
                     ],
                     borderWidth: 1
