@@ -19,14 +19,14 @@ async function fetchData() {
 }
 
 
-export async function renderCareerChart() {
+export async function renderSearchableCareerChart() {
     const data = await fetchData();
     if (!data.length) return;
 
     const labels = [];
     const datasets = [];
 
-    const canvas = document.getElementById('career-stage-chart');
+    const canvas = document.getElementById('career-stage-chart-modal');
     if (!canvas) {
         console.error('Canvas not found');
         return;
