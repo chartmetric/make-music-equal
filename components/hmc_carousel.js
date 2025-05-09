@@ -44,9 +44,9 @@ export async function renderCarousel() {
             width: 300px;
             height: 200px;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
@@ -60,16 +60,14 @@ export async function renderCarousel() {
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Helvetica Neue, sans-serif;
-            text-align: center;
+            text-align: left;
         }
         .carousel-title {
             font-weight: bold;
-            font-size: 1.2rem;
-            line-height: 1.2rem;
-            text-align: center;
+            font-size: 1rem;
+            line-height: 1rem;
             background: linear-gradient(225deg, #4D8BB6 0%, #53A751 100%);
             background-clip: text;
-            padding-top: 0.5rem;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -77,7 +75,6 @@ export async function renderCarousel() {
             margin: 1rem 0;
             font-size: 1rem;
             color: #555;
-            text-align: center;
         }
     `;
     document.head.appendChild(style);
