@@ -35,13 +35,6 @@ export async function renderCareerChart() {
     }
 
     canvases.forEach(canvas => {
-        if (!canvas) {
-            console.warn('A canvas element is missing, skipping...');
-            return;
-        }
-    });
-
-    canvases.forEach(canvas => {
         const ctx = canvas.getContext('2d');
         const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
         orangeGr.addColorStop(0, '#F0899A'); // Start color
