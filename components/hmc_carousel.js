@@ -44,9 +44,9 @@ export async function renderCarousel() {
             width: 300px;
             height: 200px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             background-color: #fff;
@@ -60,14 +60,15 @@ export async function renderCarousel() {
             white-space: pre-wrap;
             word-break: break-word;
             font-family: Helvetica Neue, sans-serif;
-            text-align: left;
+            text-align: center;
         }
         .carousel-title {
             font-weight: bold;
-            font-size: 1rem;
-            line-height: 1rem;
+            font-size: 1.2rem;
+            line-height: 1.2rem;
             background: linear-gradient(225deg, #4D8BB6 0%, #53A751 100%);
             background-clip: text;
+            padding-top: 1rem;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -90,10 +91,6 @@ export async function renderCarousel() {
 
         const articleDiv = document.createElement('div');
         articleDiv.classList.add('carousel-item');
-
-        // const articleImage = document.createElement('img');
-        // articleImage.src = article.image_url;
-        // articleImage.alt = article.name;
         
         const textContainer = document.createElement('div');
         textContainer.classList.add('carousel-text');

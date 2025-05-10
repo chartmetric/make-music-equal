@@ -60,11 +60,12 @@ export async function renderSearchableTable() {
     /* Bold headers */
     .ag-header-cell {
       font-weight: bold;
+      background-color: rgba(216,163,255,0.4)
     }
 
     /* Highlight rows on hover */
     .ag-row:hover {
-      background-color: #C0E7F4 !important;
+      background-color: rgba(238,194,63,0.5) !important;
     }
 
     overscroll-behavior: contain;
