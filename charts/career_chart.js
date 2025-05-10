@@ -1,26 +1,14 @@
 "use strict";
 
-async function fetchData() {
-    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/career-breakdown.csv');
-    const csvText = await response.text();
-    const rows = csvText.trim().split('\n');
-
-    const data = rows.slice(1).map(row => {
-        const values = row.split(',');
-        return {
-            career_stage: values[0].trim(),
-            he_him: Number(values[1].trim()) || 0,
-            she_her: Number(values[2].trim()) || 0,
-            they_them: Number(values[3].trim()) || 0
-        };
-    })
-
-    return data;
-}
-
+import {fetchData} from '../utils.js'
 
 export async function renderCareerChart() {
-    const data = await fetchData();
+
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/career-breakdown.csv';
+    const metric = 'career_stage';
+
+    const data = await fetchData(url, metric);
+
     if (!data.length) return;
 
     const labels = [];

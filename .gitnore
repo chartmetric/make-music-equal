@@ -5,7 +5,7 @@ node_modules/
 dist/
 
 # Cache (optional but recommended)
-.cache/
+.parcel-cache/
 
 # Mac system files
 .DS_Store
