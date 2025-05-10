@@ -941,24 +941,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "renderCompositionChart", ()=>renderCompositionChart);
 "use strict";
-async function fetchData() {
-    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/composition-breakdown.csv');
-    const csvText = await response.text();
-    const rows = csvText.trim().split('\n');
-    const headers = rows[0].split(',');
-    const data = rows.slice(1).map((row)=>{
-        const values = row.split(',');
-        return {
-            composition: values[0].trim(),
-            he_him: Number(values[1].trim()) || 0,
-            she_her: Number(values[2].trim()) || 0,
-            they_them: Number(values[3].trim()) || 0
-        };
-    });
-    return data;
-}
 async function renderCompositionChart() {
-    const data = await fetchData();
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/composition-breakdown.csv';
+    const metric = 'composition';
+    const data = await fetchData(url, metric);
     const labels = data.map((row)=>row.composition);
     const ctx = document.getElementById('solo-band-chart').getContext('2d');
     ctx.canvas.height = 300;
