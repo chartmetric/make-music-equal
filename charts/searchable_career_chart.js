@@ -9,7 +9,7 @@ export async function renderSearchableCareerChart() {
     
     const data = await fetchData(url, metricName);
 
-     if (!data.length) return;
+    if (!data.length) return;
 
     const container = document.getElementById('searchable-career-container');
 
