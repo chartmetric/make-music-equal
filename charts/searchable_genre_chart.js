@@ -7,9 +7,7 @@ export async function renderSearchableGenreChart() {
 
     const data = await fetchData(url, metricName);
 
-    if (data.length === 0) {
-        return; // No data to render
-    }
+     if (!data.length) return;
 
     const container = document.getElementById('searchable-genre-container');
 
@@ -33,6 +31,28 @@ export async function renderSearchableGenreChart() {
         updateDropdown('');
         dropdown.style.display = 'block';
     });
+
+    // Set the initial value of the input to the first genre's name
+    input.value = data[0].genre;
+
+    input.addEventListener('click', () => {
+        updateDropdown('');
+        dropdown.style.display = 'block';
+    });
+
+
+    // Add a down arrow to indicate dropdown
+    const arrow = document.createElement('span');
+    arrow.textContent = '\u25BC'; // Unicode for down arrow
+    arrow.style.position = 'absolute';
+    arrow.style.right = '10px';
+    arrow.style.top = '50%';
+    arrow.style.transform = 'translateY(-50%)';
+    arrow.style.pointerEvents = 'none';
+    arrow.style.color = '#A0A0A0';
+
+    // Append arrow to the search wrapper
+    searchWrapper.appendChild(arrow);
 
     // Create a dropdown container for the options
     const dropdown = document.createElement('div');

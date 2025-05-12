@@ -8,9 +8,7 @@ export async function renderSearchableCountriesChart() {
     
     const data = await fetchData(url, metricName);
 
-    if (data.length === 0) {
-        return; // No data to render
-    }
+     if (!data.length) return;
 
     const container = document.getElementById('searchable-countries-container');
 
@@ -100,6 +98,19 @@ export async function renderSearchableCountriesChart() {
         dropdown.style.display = filteredData.length > 0 ? 'block' : 'none';
     };
 
+     // Add a down arrow to indicate dropdown
+     const arrow = document.createElement('span');
+     arrow.textContent = '\u25BC'; // Unicode for down arrow
+     arrow.style.position = 'absolute';
+     arrow.style.right = '10px';
+     arrow.style.top = '50%';
+     arrow.style.transform = 'translateY(-50%)';
+     arrow.style.pointerEvents = 'none';
+     arrow.style.color = '#A0A0A0';
+ 
+     // Append arrow to the search wrapper
+     searchWrapper.appendChild(arrow);
+
     // Update dropdown on input
     input.addEventListener('input', () => {
         updateDropdown(input.value);
@@ -111,6 +122,7 @@ export async function renderSearchableCountriesChart() {
             dropdown.style.display = 'none';
         }
     });
+
 
     // Function to render chart for selected country
     const renderChart = (countryIndex) => {

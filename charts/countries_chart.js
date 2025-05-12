@@ -9,9 +9,7 @@ export async function renderCountryChart() {
 
     const data = await fetchData(url, metricName);
 
-    if (data.length === 0) {
-        return; // No data to render
-    }
+     if (!data.length) return;
 
     const countryData = data[0]; // Only use the first row of data
     const container = document.getElementById('donut-countries-container');

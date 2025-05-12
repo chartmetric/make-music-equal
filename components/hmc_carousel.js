@@ -1,24 +1,13 @@
 "use strict";
 
-async function fetchData() {
-    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv');
-    const csvText = await response.text();
-    const rows = csvText.trim().split('\n');
-
-    const data = rows.slice(1).map(row => {
-        const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(value => value.replace(/^"|"$/g, '').trim());
-        return {
-            name: values[1],
-            published_at: new Date(values[2]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-            url: values[3],
-        };
-    });
-
-    return data;
-}
+import { fetchArticles } from "../utils";
 
 export async function renderCarousel() {
-    const data = await fetchData();
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv'
+    
+    const data = await fetchArticles(url)
+
+     if (!data.length) return;
 
     const carousel = document.getElementById('hmc-articles-carousel');
     carousel.style.display = 'flex';

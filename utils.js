@@ -5,7 +5,7 @@ export async function fetchData(url, metricName) {
     const rows = csvText.trim().split('\n');
   
     const data = rows.slice(1).map(row => {
-      const values = row.split(',');
+      const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(value => value.replace(/^"|"$/g, '').trim());
   
       return {
         [metricName]: values[0].trim(),
@@ -18,3 +18,43 @@ export async function fetchData(url, metricName) {
     return data;
   }
   
+
+  export async function fetchArticles(url) {
+    const response = await fetch(url);
+    const csvText = await response.text();
+    const rows = csvText.trim().split('\n');
+  
+    const data = rows.slice(1).map(row => {
+      const values = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(value => value.replace(/^"|"$/g, '').trim());
+  
+      return {
+        name: values[1],
+        published_at: new Date(values[2]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        url: values[3],
+      };
+    });
+  
+    return data;
+  }
+  
+  export async function fetchTableData(url) {
+    const response = await fetch(url);
+    const csvText = await response.text();
+    const rows = csvText.trim().split('\n');
+  
+    const data = rows.slice(1).map(row => {
+      const values = row.split(',');
+  
+      return {
+        artist_name: values[1].trim(),
+        chartmetric_url: values[2].trim(),
+        country_name: values[3].trim(),
+        pronouns: values[4].trim(),
+        composition: values[5].trim(),
+        career_stage: values[6].trim(),
+        genre: values[7].trim(),
+      };
+    });
+  
+    return data;
+  }

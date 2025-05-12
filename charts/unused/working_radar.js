@@ -19,9 +19,7 @@ async function fetchData() {
 
 export async function renderRadar() {
     const data = await fetchData();
-    if (data.length === 0) {
-        return; // No data to render
-    }
+     if (!data.length) return;
 
     const careerData = data[2]; // Only use the first row of data
 
