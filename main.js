@@ -1,6 +1,5 @@
 "use strict";
 
-// import { renderPronounGridChart } from './charts/pronouns_grid.js';
 import {renderCareerChart} from './charts/career_chart.js';
 import {renderSearchableCareerChart} from './charts/searchable_career_chart.js'
 import { renderCountryChart } from './charts/countries_chart.js';

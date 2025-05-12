@@ -1,5 +1,5 @@
 "use strict";
-import {fetchData} from '../components/utils'
+import {fetchData} from '../components/utils.js'
 
 export async function renderSearchableGenreChart() {
     const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv';
