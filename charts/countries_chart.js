@@ -1,28 +1,14 @@
 "use strict";
 
-async function fetchData() {
-    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv');
-    const csvText = await response.text();
-
-    const rows = csvText.trim().split('\n');
-
-    if (rows.length < 2) {
-        return []; // Return empty array if no data is available
-    }
-
-    const values = rows[1].split(',').map(value => value.trim());
-    const data = [{
-        country_name: values[0],
-        he_him: Number(values[1]) || 0,
-        she_her: Number(values[2]) || 0,
-        they_them: Number(values[3]) || 0
-    }];
-
-    return data;
-}
+import {fetchData} from '../utils.js'
 
 export async function renderCountryChart() {
-    const data = await fetchData();
+
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv';
+    const metricName = 'country_name';
+
+    const data = await fetchData(url, metricName);
+
     if (data.length === 0) {
         return; // No data to render
     }

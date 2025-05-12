@@ -1,4 +1,5 @@
 "use strict";
+import {fetchData} from '../utils.js'
 
 export async function renderCompositionChart() {
     const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/composition-breakdown.csv';

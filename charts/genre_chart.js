@@ -1,30 +1,16 @@
 "use strict";
-
-
-async function fetchData() {
-    const response = await fetch('https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv');
-    const csvText = await response.text();
-    const rows = csvText.trim().split('\n');
-
-    const data = rows.slice(1).map(row => {
-        const values = row.split(',');
-        return {
-            genre: values[0].trim(),
-            he_him: Number(values[1].trim()) || 0,
-            she_her: Number(values[2].trim()) || 0,
-            they_them: Number(values[3].trim()) || 0
-        };
-    }).slice(0, 3); // Limit to the first 3 data points
-
-    return data;
-}
+import {fetchData} from '../utils.js'
 
 export async function renderGenreChart() {
-    const data = await fetchData();
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv';
+    const metricName = 'genre';
+
+    const preData = await fetchData(url, metricName);
+    const data = preData.slice(0,3)
 
     const labels = data.map(row => row.genre); 
 
-    const ctx = document.getElementById('top5-genre-chart').getContext('2d')
+    const ctx = document.getElementById('genre-chart').getContext('2d')
     ctx.canvas.height = 300;
     ctx.canvas.width = 300;
 

@@ -1,18 +1,17 @@
 "use strict";
-import {fetchData} from '../utils.js'
+import {fetchData} from '../utils.js';
 
-export async function renderSearchableCountriesChart() {
+export async function renderSearchableGenreChart() {
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv';
+    const metricName = 'genre';
 
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv';
-        const metricName = 'country_name';
-    
     const data = await fetchData(url, metricName);
 
     if (data.length === 0) {
         return; // No data to render
     }
 
-    const container = document.getElementById('searchable-countries-container');
+    const container = document.getElementById('searchable-genre-container');
 
     // Create a wrapper for the search input and dropdown
     const searchWrapper = document.createElement('div');
@@ -21,18 +20,14 @@ export async function renderSearchableCountriesChart() {
 
     // Create an input field for searching
     const input = document.createElement('input');
-    input.id = 'country-search';
-    input.placeholder = 'Search for a country...';
+    input.id = 'genre-search';
+    input.placeholder = 'Search for a genre...';
     input.style.width = '100%';
     input.style.padding = '0.5rem';
     input.style.border = '1px solid #D8D8D8';
     input.style.borderRadius = '5px';
     input.style.boxSizing = 'border-box';
-    input.style.lineHeight = '1.5'
-    input.style.setProperty('--webkit-input-placeholder', 'line-height: 1.5;');
-
-    // Set the initial value of the input to the first country's name
-    input.value = data[0].country_name;
+    input.style.lineHeight = '1.5';
 
     input.addEventListener('click', () => {
         updateDropdown('');
@@ -41,7 +36,7 @@ export async function renderSearchableCountriesChart() {
 
     // Create a dropdown container for the options
     const dropdown = document.createElement('div');
-    dropdown.id = 'country-dropdown';
+    dropdown.id = 'genre-dropdown';
     dropdown.style.position = 'absolute';
     dropdown.style.top = '100%';
     dropdown.style.left = '0';
@@ -54,7 +49,6 @@ export async function renderSearchableCountriesChart() {
     dropdown.style.maxHeight = '200px';
     dropdown.style.overflowY = 'auto';
     dropdown.style.display = 'none';
-    dropdown.style.lineHeight = '1.5';
 
     // Append input and dropdown to the wrapper
     searchWrapper.appendChild(input);
@@ -63,18 +57,18 @@ export async function renderSearchableCountriesChart() {
     // Append the wrapper to the container
     container.appendChild(searchWrapper);
 
-    // Populate dropdown with country names
+    // Populate dropdown with genre names
     const updateDropdown = (filter) => {
         dropdown.innerHTML = ''; // Clear previous options
         const filteredData = data
-            .filter(countryData =>
-                countryData.country_name.toLowerCase().includes(filter.toLowerCase())
+            .filter(genreData =>
+                genreData.genre.toLowerCase().includes(filter.toLowerCase())
             )
-            .sort((a, b) => a.country_name.localeCompare(b.country_name)); // Sort alphabetically
+            .sort((a, b) => a.genre.localeCompare(b.genre)); // Sort alphabetically
 
-        filteredData.forEach((countryData, index) => {
+        filteredData.forEach((genreData, index) => {
             const option = document.createElement('div');
-            option.textContent = countryData.country_name;
+            option.textContent = genreData.genre;
             option.style.padding = '0.5rem';
             option.style.cursor = 'pointer';
             option.style.borderBottom = '1px solid #F0F0F0';
@@ -89,7 +83,7 @@ export async function renderSearchableCountriesChart() {
             });
 
             option.addEventListener('click', () => {
-                input.value = countryData.country_name;
+                input.value = genreData.genre;
                 dropdown.style.display = 'none';
                 renderChart(index);
             });
@@ -112,19 +106,19 @@ export async function renderSearchableCountriesChart() {
         }
     });
 
-    // Function to render chart for selected country
-    const renderChart = (countryIndex) => {
-        const countryData = data[countryIndex];
+    // Function to render chart for selected genre
+    const renderChart = (genreIndex) => {
+        const genreData = data[genreIndex];
 
         // Remove existing chart if any
-        const existingCanvas = document.getElementById('searchable-donut');
+        const existingCanvas = document.getElementById('genre-searchable-bar');
         if (existingCanvas) {
             existingCanvas.remove();
         }
 
-        // Create a canvas for the country
+        // Create a canvas for the genre
         const canvas = document.createElement('canvas');
-        canvas.id = `searchable-donut`;
+        canvas.id = `genre-searchable-bar`;
         canvas.style.width = '300px';
         canvas.style.height = '300px';
 
@@ -140,14 +134,14 @@ export async function renderSearchableCountriesChart() {
 
         const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
         orangeGr.addColorStop(0, '#F0899A'); // Start color
-        orangeGr.addColorStop(1, '#EEC23F'); // End color
-        
+        orangeGr.addColorStop(1, '#EEC23F'); // End color;
+
         new Chart(ctx, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 labels: ['he/him', 'she/her', 'they/them'],
                 datasets: [{
-                    data: [countryData.he_him, countryData.she_her, countryData.they_them],
+                    data: [genreData.he_him, genreData.she_her, genreData.they_them],
                     backgroundColor: [
                         orangeGr,
                         '#C0E7F4',
@@ -171,21 +165,45 @@ export async function renderSearchableCountriesChart() {
                                 } else if (value >= 1000) {
                                     value = (value / 1000).toFixed(1) + 'k';
                                 }
-                                return `${value} artists`
+                                return `${value} artists`;
                             }
                         }
                     }
                 },
-                cutout: '40%' // Adjusts the size of the doughnut hole
-            }});
-        };
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                if (value >= 1000000) {
+                                    return (value / 1000000).toFixed(0) + 'm';
+                                } else if (value >= 1000) {
+                                    return (value / 1000).toFixed(0) + 'k';
+                                }
+                                return value;
+                            }
+                        },
+                        grid: {
+                            display: true,
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        ticks: {
+                            callback: function(index) {
+                                return ['he/him', 'she/her', 'they/them'][index];
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    };
 
-    // Initial render for the first country
+    // Initial render for the first genre
     renderChart(0);
-
-    // Update chart on dropdown change
-    dropdown.addEventListener('change', (event) => {
-        renderChart(event.target.value);
-        }
-    )
 }
