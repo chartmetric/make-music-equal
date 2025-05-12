@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchArticles } from "./utils";
+import { fetchArticles } from "./utils.js";
 
 export async function renderCarousel() {
     const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv'

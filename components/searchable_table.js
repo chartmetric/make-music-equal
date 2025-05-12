@@ -1,6 +1,6 @@
 "use strict";
 
-import { fetchTableData } from "./utils";
+import { fetchTableData } from "./utils.js";
 
 export async function renderSearchableTable() {
 
