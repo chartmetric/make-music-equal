@@ -1,4 +1,4 @@
-import { fetchTableData } from "../utils";
+import { fetchTableData } from "./utils"
 
 export async function renderTotalArtists() {
 

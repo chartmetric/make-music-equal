@@ -20,7 +20,7 @@ container.appendChild(dateElement);
 const container_2 = document.getElementById('date-date-2');
 
 const dateElement_2 = document.createElement('div');
-dateElement_2.innerHTML = 'chart data last updated on ' + (new Date(lastModified).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+dateElement_2.innerHTML = 'chart data updates monthly, last updated on ' + (new Date(lastModified).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
 
 container_2.appendChild(dateElement_2);
 }

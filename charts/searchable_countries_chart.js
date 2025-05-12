@@ -1,5 +1,5 @@
 "use strict";
-import {fetchData} from '../utils.js'
+import {fetchData} from '../components/utils'
 
 export async function renderSearchableCountriesChart() {
 
