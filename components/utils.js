@@ -46,13 +46,15 @@ export async function fetchData(url, metricName) {
       const values = row.split(',');
   
       return {
-        artist_name: values[1].trim(),
-        chartmetric_url: values[2].trim(),
-        country_name: values[3].trim(),
-        pronouns: values[4].trim(),
-        composition: values[5].trim(),
-        career_stage: values[6].trim(),
-        genre: values[7].trim(),
+        chartmetric_rank: values[1].trim(),
+        chartmetric_id: values[2].trim(),
+        artist_name: values[3].trim(),
+        chartmetric_url: values[4].trim(),
+        country_name: values[5].trim(),
+        composition: values[6].trim(),
+        career_stage: values[7].trim(),
+        pronouns: values[8].trim(),
+        genre: values[9].trim(),
       };
     });
   
