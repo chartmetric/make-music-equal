@@ -10,7 +10,7 @@
 //             career_stage: values[0].trim(),
 //             he_him: Number(values[1].trim()) || 0,
 //             she_her: Number(values[2].trim()) || 0,
-//             they_them: Number(values[3].trim()) || 0
+//             they_them_other_pronouns: Number(values[3].trim()) || 0
 //         };
 //     })
 
@@ -34,10 +34,10 @@
 //     new Chart(ctx, {
 //         type: 'polarArea',
 //         data: {
-//           labels: ['he/him', 'she/her', 'they/them'],
+//           labels: ['he/him', 'she/her', 'they/them and other pronouns'],
 //           datasets: [{
 //             label: 'Career Stage',
-//             data: [careerData.he_him, careerData.she_her, careerData.they_them],
+//             data: [careerData.he_him, careerData.she_her, careerData.they_them_other_pronouns],
 //             backgroundColor: [
 //               'rgb(255, 99, 132)',
 //               'rgb(75, 192, 192)',

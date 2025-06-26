@@ -2,7 +2,7 @@
 import {fetchData} from '../components/utils.js'
 
 export async function renderSearchableGenreChart() {
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv';
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_genre.csv';
     const metricName = 'genre';
 
     const data = await fetchData(url, metricName);
@@ -105,7 +105,7 @@ export async function renderSearchableGenreChart() {
             option.addEventListener('click', () => {
                 input.value = genreData.genre;
                 dropdown.style.display = 'none';
-                renderChart(index);
+                renderChart(genreData);
             });
 
             dropdown.appendChild(option);
@@ -127,9 +127,7 @@ export async function renderSearchableGenreChart() {
     });
 
     // Function to render chart for selected genre
-    const renderChart = (genreIndex) => {
-        const genreData = data[genreIndex];
-
+    const renderChart = (genreData) => {
         // Remove existing chart if any
         const existingCanvas = document.getElementById('genre-searchable-bar');
         if (existingCanvas) {
@@ -156,74 +154,86 @@ export async function renderSearchableGenreChart() {
         orangeGr.addColorStop(0, '#F0899A'); // Start color
         orangeGr.addColorStop(1, '#EEC23F'); // End color;
 
+        const blueGr = ctx.createLinearGradient(0, 0, 0, 400);
+        blueGr.addColorStop(0, '#C0E7F4'); // Start color
+        blueGr.addColorStop(1, '#A0B1FF'); // End color
+
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['he/him', 'she/her', 'they/them'],
-                datasets: [{
-                    data: [genreData.he_him, genreData.she_her, genreData.they_them],
-                    backgroundColor: [
-                        orangeGr,
-                        '#C0E7F4',
-                        '#B7A7F9'
-                    ],
-                    borderWidth: 1
-                }]
+            labels: [
+                'he/him',
+                'she/her',
+                'they/them\nand other pronouns'
+            ],
+            datasets: [{
+                data: [genreData.he_him, genreData.she_her, genreData.they_them_other_pronouns],
+                backgroundColor: [
+                blueGr,
+                orangeGr,
+                '#E2EF70'
+                ],
+                borderWidth: 1
+            }]
             },
             options: {
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: context => {
-                                let value = context.raw;
-                                if (value >= 1000000) {
-                                    value = (value / 1000000).toFixed(1) + 'm';
-                                } else if (value >= 1000) {
-                                    value = (value / 1000).toFixed(1) + 'k';
-                                }
-                                return `${value} artists`;
-                            }
-                        }
-                    }
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                display: false
                 },
-                indexAxis: 'y',
-                scales: {
-                    x: {
-                        stacked: true,
-                        ticks: {
-                            callback: function(value) {
-                                if (value >= 1000000) {
-                                    return (value / 1000000).toFixed(0) + 'm';
-                                } else if (value >= 1000) {
-                                    return (value / 1000).toFixed(0) + 'k';
-                                }
-                                return value;
-                            }
-                        },
-                        grid: {
-                            display: true,
-                        }
-                    },
-                    y: {
-                        stacked: true,
-                        ticks: {
-                            callback: function(index) {
-                                return ['he/him', 'she/her', 'they/them'][index];
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
+                tooltip: {
+                callbacks: {
+                    label: context => {
+                    let value = context.raw;
+                    if (value >= 1000000) {
+                        value = (value / 1000000).toFixed(1) + 'm';
+                    } else if (value >= 1000) {
+                        value = (value / 1000).toFixed(1) + 'k';
+                    }
+                    return `${value} artists`;
                     }
                 }
+                }
+            },
+            indexAxis: 'y',
+            scales: {
+                x: {
+                stacked: true,
+                ticks: {
+                    callback: function(value) {
+                    if (value >= 1000000) {
+                        return (value / 1000000).toFixed(0) + 'm';
+                    } else if (value >= 1000) {
+                        return (value / 1000).toFixed(0) + 'k';
+                    }
+                    return value;
+                    }
+                },
+                grid: {
+                    display: true,
+                }
+                },
+                y: {
+                stacked: true,
+                ticks: {
+                    callback: function(index) {
+                    return [
+                        ['he/him'],
+                        ['she/her'],
+                        ['they/them', 'and other pronouns']
+                    ][index];
+                    }
+                },
+                grid: {
+                    display: false
+                }
+                }
+            }
             }
         });
     };
 
     // Initial render for the first genre
-    renderChart(0);
+    renderChart(data[0]);
 }

@@ -4,7 +4,7 @@ import {fetchData}  from '../components/utils.js'
 
 export async function renderCountryChart() {
 
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/country-breakdown.csv';
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_countries.csv';
     const metricName = 'country_name';
 
     const data = await fetchData(url, metricName);
@@ -33,16 +33,20 @@ export async function renderCountryChart() {
     orangeGr.addColorStop(0, '#F0899A'); // Start color
     orangeGr.addColorStop(1, '#EEC23F'); // End color
 
+    const blueGr = ctx.createLinearGradient(0, 0, 0, 400);
+    blueGr.addColorStop(0, '#C0E7F4'); // Start color
+    blueGr.addColorStop(1, '#A0B1FF'); // End color
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['he/him', 'she/her', 'they/them'],
+            labels: ['he/him', 'she/her', 'they/them and other pronouns'],
             datasets: [{
-                data: [countryData.he_him, countryData.she_her, countryData.they_them],
+                data: [countryData.he_him, countryData.she_her, countryData.they_them_other_pronouns],
                 backgroundColor: [
+                    blueGr,
                     orangeGr,
-                    '#C0E7F4',
-                    '#B7A7F9'
+                    '#E2EF70'
                 ],
                 borderWidth: 1
             }]

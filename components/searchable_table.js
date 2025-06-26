@@ -4,7 +4,7 @@ import { fetchTableData } from "./utils.js";
 
 export async function renderSearchableTable() {
 
-  const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme-data.csv'
+  const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_artist_info.csv'
   const data = await fetchTableData(url)
 
   if (!data.length) {
@@ -17,6 +17,7 @@ export async function renderSearchableTable() {
     paginationPageSize: 50,
     paginationPageSizeSelector: false,
     columnDefs: [
+      { headerName: "", field: "chartmetric_rank", width: 50, minWidth: 50, flex: 0, filter: false },
       { headerName: "Artist", field: "artist_name", 
         cellRenderer: params => {
           const link = document.createElement("a");
@@ -54,6 +55,15 @@ export async function renderSearchableTable() {
     /* Highlight rows on hover */
     .ag-row:hover {
       background-color: rgba(238,194,63,0.5) !important;
+    }
+
+    /* Hide horizontal scrollbar */
+    .ag-body-horizontal-scroll {
+      display: none !important;
+    }
+    
+    .ag-body-viewport {
+      overflow-x: hidden !important;
     }
 
     overscroll-behavior: contain;

@@ -19,7 +19,7 @@
 //   switch (point) {
 //     case 'he/him': return '#C0E7F4';
 //     case 'she/her': return '#F0899A';
-//     case 'they/them': return '#B7A7F9';
+//     case 'they/them and other pronouns': return '#E2EF70';
 //     default: return '#CECECE';
 //   }
 // }

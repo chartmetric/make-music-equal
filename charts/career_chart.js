@@ -4,7 +4,7 @@ import {fetchData} from '../components/utils.js'
 
 export async function renderCareerChart() {
 
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/career-breakdown.csv';
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_career_stage.csv';
     const metric = 'career_stage';
 
     const data = await fetchData(url, metric);
@@ -25,18 +25,22 @@ export async function renderCareerChart() {
     orangeGr.addColorStop(0, '#F0899A'); // Start color
     orangeGr.addColorStop(1, '#EEC23F'); // End color
 
-    const baseColors = [orangeGr, '#C0E7F4', '#B7A7F9']; // he/him, she/her, they/them
+    const blueGr = ctx.createLinearGradient(0, 0, 0, 400);
+    blueGr.addColorStop(0, '#C0E7F4'); // Start color
+    blueGr.addColorStop(1, '#A0B1FF'); // End color
+
+    const baseColors = [blueGr, orangeGr,'#E2EF70']; // he/him, she/her, they/them and other pronouns
 
     data.forEach(stage => {
         labels.push(
             `${stage.career_stage}: he/him`,
             `${stage.career_stage}: she/her`,
-            `${stage.career_stage}: they/them`
+            `${stage.career_stage}: they/them and other pronouns`
         );
         datasets.push({
             label: stage.career_stage,
             backgroundColor: baseColors,
-            data: [stage.he_him, stage.she_her, stage.they_them]
+            data: [stage.he_him, stage.she_her, stage.they_them_other_pronouns]
         });
     });
 

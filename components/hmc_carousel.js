@@ -3,7 +3,7 @@
 import { fetchArticles } from "./utils.js";
 
 export async function renderCarousel() {
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc-articles.csv'
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/hmc_articles.csv'
     
     const data = await fetchArticles(url)
 

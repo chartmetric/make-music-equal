@@ -4,7 +4,7 @@ import {fetchData} from '../components/utils.js'
 
 export async function renderSearchableCareerChart() {
 
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/career-breakdown.csv';
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_career_stage.csv';
         const metricName = 'career_stage';
     
     const data = await fetchData(url, metricName);
@@ -90,7 +90,7 @@ export async function renderSearchableCareerChart() {
             option.addEventListener('click', () => {
                 input.value = careerData.career_stage;
                 dropdown.style.display = 'none';
-                renderChart(index);
+                renderChart(careerData);
             });
 
             dropdown.appendChild(option);
@@ -125,10 +125,8 @@ export async function renderSearchableCareerChart() {
     });
 
 
-    // Function to render chart for selected country
-    const renderChart = (countryIndex) => {
-        const careerData = data[countryIndex];
-
+    // Function to render chart for selected career stage
+    const renderChart = (careerData) => {
         // Remove existing chart if any
         const existingCanvas = document.getElementById('career-searchable-donut');
         if (existingCanvas) {
@@ -154,17 +152,21 @@ export async function renderSearchableCareerChart() {
         const orangeGr = ctx.createLinearGradient(0, 0, 0, 400);
         orangeGr.addColorStop(0, '#F0899A'); // Start color
         orangeGr.addColorStop(1, '#EEC23F'); // End color
+
+        const blueGr = ctx.createLinearGradient(0, 0, 0, 400);
+        blueGr.addColorStop(0, '#C0E7F4'); // Start color
+        blueGr.addColorStop(1, '#A0B1FF'); // End color
         
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['he/him', 'she/her', 'they/them'],
+                labels: ['he/him', 'she/her', 'they/them and other pronouns'],
                 datasets: [{
-                    data: [careerData.he_him, careerData.she_her, careerData.they_them],
+                    data: [careerData.he_him, careerData.she_her, careerData.they_them_other_pronouns],
                     backgroundColor: [
+                        blueGr,
                         orangeGr,
-                        '#C0E7F4',
-                        '#B7A7F9'
+                        '#E2EF70'
                     ],
                     borderWidth: 1
                 }]
@@ -193,12 +195,6 @@ export async function renderSearchableCareerChart() {
             }});
         };
 
-    // Initial render for the first country
-    renderChart(0);
-
-    // Update chart on dropdown change
-    dropdown.addEventListener('change', (event) => {
-        renderChart(event.target.value);
-        }
-    )
+    // Initial render for the first career stage
+    renderChart(data[0]);
 }

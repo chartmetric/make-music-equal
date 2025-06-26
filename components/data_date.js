@@ -1,7 +1,7 @@
 
 export async function renderDataDate() {
 
-const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme-data.csv';
+const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_data_details.csv';
 
 // Fetch the file's metadata to get the date
 const response = await fetch(url, { method: 'HEAD' });

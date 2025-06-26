@@ -2,7 +2,7 @@
 import {fetchData} from '../components/utils.js'
 
 export async function renderGenreChart() {
-    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/genre-breakdown.csv';
+    const url = 'https://chartmetric-public.s3.us-west-2.amazonaws.com/make-music-equal/mme_genre.csv';
     const metricName = 'genre';
 
     const preData = await fetchData(url, metricName);
@@ -18,22 +18,25 @@ export async function renderGenreChart() {
     orangeGr.addColorStop(0, '#F0899A'); // Start color
     orangeGr.addColorStop(1, '#EEC23F'); // End color
 
+    const blueGr = ctx.createLinearGradient(0, 0, 0, 400);
+    blueGr.addColorStop(0, '#C0E7F4'); // Start color
+    blueGr.addColorStop(1, '#A0B1FF'); // End color
 
     const datasets = [
         {
             label: 'he/him',
             data: data.map(row => row.he_him),
-            backgroundColor: orangeGr
+            backgroundColor: blueGr
         },
         {
             label: 'she/her',
             data: data.map(row => row.she_her),
-            backgroundColor: '#C0E7F4'
+            backgroundColor: orangeGr
         },
         {
-            label: 'they/them',
-            data: data.map(row => row.they_them),
-            backgroundColor: '#B7A7F9'
+            label: 'they/them and other',
+            data: data.map(row => row.they_them_other_pronouns),
+            backgroundColor: '#E2EF70'
         }
     ];
 
@@ -72,7 +75,7 @@ export async function renderGenreChart() {
                             } else if (value >= 1000) {
                                 value = (value / 1000).toFixed(1) + 'k';
                             }
-                            return `${value} artists use ${context.dataset.label} pronouns`;
+                            return [`${value} artists use`, `${context.dataset.label} pronouns`];
                         }
                     }
                 }

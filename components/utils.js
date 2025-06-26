@@ -11,7 +11,9 @@ export async function fetchData(url, metricName) {
         [metricName]: values[0].trim(),
         he_him: Number(values[1].trim()) || 0,
         she_her: Number(values[2].trim()) || 0,
-        they_them: Number(values[3].trim()) || 0
+        they_them_other_pronouns: Number(values[3].trim()) || 0,
+        band: Number(values[4].trim()) || 0,
+        artist_count: Number(values[5].trim()) || 0
       };
     });
   
@@ -54,7 +56,7 @@ export async function fetchData(url, metricName) {
         composition: values[5]?.trim(),
         career_stage: values[6]?.trim(),
         pronouns: values[7]?.trim(),
-        genre: values[8]?.trim(),
+        genre: values[8]?.trim()
       };
     });
 
