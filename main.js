@@ -1,9 +1,10 @@
 "use strict";
 
+// Wait for dependencies to be available
 function waitForDependencies() {
     return new Promise((resolve) => {
         const checkDeps = () => {
-            if (typeof Chart !== 'undefined' && typeof window.Webflow !== 'undefined') {
+            if (typeof Chart !== 'undefined' && typeof agGrid !== 'undefined' && window.Webflow) {
                 resolve();
             } else {
                 setTimeout(checkDeps, 100);
@@ -13,19 +14,18 @@ function waitForDependencies() {
     });
 }
 
+// Dynamic imports that wait for dependencies
 async function initializeApp() {
     try {
         await waitForDependencies();
-
-        const isDesktop = window.innerWidth >= 992;
-
+        
         const [
             { renderCareerChart },
             { renderSearchableCareerChart },
             { renderCountryChart },
             { renderGenreChart },
             { renderCompositionChart },
-            searchableTableModule,
+            { renderSearchableTable },
             { renderCarousel },
             { renderSearchableCountriesChart },
             { renderSearchableGenreChart },
@@ -37,7 +37,7 @@ async function initializeApp() {
             import('./charts/countries_chart.js'),
             import('./charts/genre_chart.js'),
             import('./charts/composition_chart.js'),
-            import('./components/searchable_table.js'), // included, but optional use
+            import('./components/searchable_table.js'),
             import('./components/hmc_carousel.js'),
             import('./charts/searchable_countries_chart.js'),
             import('./charts/searchable_genre_chart.js'),
@@ -45,7 +45,8 @@ async function initializeApp() {
             import('./components/data_date.js')
         ]);
 
-        document.addEventListener('DOMContentLoaded', () => {
+        window.Webflow ||= [];
+        window.Webflow.push(() => {
             renderTotalArtists();
             renderDataDate();
             renderCareerChart();
@@ -55,15 +56,10 @@ async function initializeApp() {
             renderCountryChart();
             renderSearchableCountriesChart();
             renderCompositionChart();
+            renderSearchableTable();
             renderCarousel();
-
-            if (isDesktop) {
-                searchableTableModule.renderSearchableTable();
-            } else {
-                console.log("Skipping ag-Grid table on mobile");
-            }
         });
-
+        
     } catch (error) {
         console.error('Failed to initialize app:', error);
     }
