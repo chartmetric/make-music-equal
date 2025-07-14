@@ -1,29 +1,68 @@
 "use strict";
 
-import {renderCareerChart} from './charts/career_chart.js';
-import {renderSearchableCareerChart} from './charts/searchable_career_chart.js'
-import { renderCountryChart } from './charts/countries_chart.js';
-import { renderGenreChart } from './charts/genre_chart.js';
-import { renderCompositionChart } from './charts/composition_chart.js';
-import {renderSearchableTable} from './components/searchable_table.js';
-import {renderCarousel } from './components/hmc_carousel.js';
-import {renderSearchableCountriesChart} from './charts/searchable_countries_chart.js'
-import {renderSearchableGenreChart} from './charts/searchable_genre_chart.js';
-import {renderTotalArtists} from './components/total_artists.js'
-import {renderDataDate} from './components/data_date.js'
+// Wait for dependencies to be available
+function waitForDependencies() {
+    return new Promise((resolve) => {
+        const checkDeps = () => {
+            if (typeof Chart !== 'undefined' && typeof agGrid !== 'undefined' && window.Webflow) {
+                resolve();
+            } else {
+                setTimeout(checkDeps, 100);
+            }
+        };
+        checkDeps();
+    });
+}
 
-window.Webflow ||= [];window.Webflow.push(() => {  
+// Dynamic imports that wait for dependencies
+async function initializeApp() {
+    try {
+        await waitForDependencies();
+        
+        const [
+            { renderCareerChart },
+            { renderSearchableCareerChart },
+            { renderCountryChart },
+            { renderGenreChart },
+            { renderCompositionChart },
+            { renderSearchableTable },
+            { renderCarousel },
+            { renderSearchableCountriesChart },
+            { renderSearchableGenreChart },
+            { renderTotalArtists },
+            { renderDataDate }
+        ] = await Promise.all([
+            import('./charts/career_chart.js'),
+            import('./charts/searchable_career_chart.js'),
+            import('./charts/countries_chart.js'),
+            import('./charts/genre_chart.js'),
+            import('./charts/composition_chart.js'),
+            import('./components/searchable_table.js'),
+            import('./components/hmc_carousel.js'),
+            import('./charts/searchable_countries_chart.js'),
+            import('./charts/searchable_genre_chart.js'),
+            import('./components/total_artists.js'),
+            import('./components/data_date.js')
+        ]);
 
-	renderTotalArtists();
-	renderDataDate();
-	renderCareerChart();
-	renderSearchableCareerChart();
-	renderGenreChart();
-	renderSearchableGenreChart()
-	renderCountryChart();
-	renderSearchableCountriesChart();
-	renderCompositionChart();
-	renderSearchableTable();
-	renderCarousel();
+        window.Webflow ||= [];
+        window.Webflow.push(() => {
+            renderTotalArtists();
+            renderDataDate();
+            renderCareerChart();
+            renderSearchableCareerChart();
+            renderGenreChart();
+            renderSearchableGenreChart();
+            renderCountryChart();
+            renderSearchableCountriesChart();
+            renderCompositionChart();
+            renderSearchableTable();
+            renderCarousel();
+        });
+        
+    } catch (error) {
+        console.error('Failed to initialize app:', error);
+    }
+}
 
-});
+initializeApp();
