@@ -25,6 +25,7 @@ async function initializeApp() {
             { renderCountryChart },
             { renderGenreChart },
             { renderCompositionChart },
+            { renderSearchableCompositionChart },
             { renderSearchableTable },
             { renderCarousel },
             { renderSearchableCountriesChart },
@@ -37,6 +38,7 @@ async function initializeApp() {
             import('./charts/countries_chart.js'),
             import('./charts/genre_chart.js'),
             import('./charts/composition_chart.js'),
+            import('./charts/searchable_composition_chart.js'),
             import('./components/searchable_table.js'),
             import('./components/hmc_carousel.js'),
             import('./charts/searchable_countries_chart.js'),
@@ -56,6 +58,7 @@ async function initializeApp() {
             renderCountryChart();
             renderSearchableCountriesChart();
             renderCompositionChart();
+            renderSearchableCompositionChart();
             renderSearchableTable();
             renderCarousel();
         });
