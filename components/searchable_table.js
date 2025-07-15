@@ -17,7 +17,7 @@ export async function renderSearchableTable() {
     paginationPageSize: 50,
     paginationPageSizeSelector: false,
     columnDefs: [
-      { headerName: "", field: "chartmetric_rank", width: 50, minWidth: 50, flex: 0, filter: false },
+      { headerName: "Chartmetric\nRank", maxWidth: 120, field: "chartmetric_rank", filter: false, sortable: false },
       { headerName: "Artist", field: "artist_name", 
         cellRenderer: params => {
           const link = document.createElement("a");
@@ -50,6 +50,17 @@ export async function renderSearchableTable() {
     .ag-header-cell {
       font-weight: bold;
       background-color: rgba(216,163,255,0.4)
+    }
+
+    /* Allow line breaks in headers */
+    .ag-header-cell-text {
+      white-space: pre-line !important;
+      line-height: 1.2;
+    }
+
+    /* Left align only the first column header */
+    .ag-header-cell:first-child .ag-header-cell-text {
+      text-align: left;
     }
 
     /* Highlight rows on hover */

@@ -23,4 +23,13 @@ const dateElement_2 = document.createElement('div');
 dateElement_2.innerHTML = 'chart data updates monthly, last updated on ' + (new Date(lastModified).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
 
 container_2.appendChild(dateElement_2);
+
+const container_3 = document.getElementById('date-date-3');
+
+const dateElement_3 = document.createElement('div');
+dateElement_3.innerHTML = 'dataset updates monthly, last updated on ' + (new Date(lastModified).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+
+container_3.appendChild(dateElement_3);
+
+
 }

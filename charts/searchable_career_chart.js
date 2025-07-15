@@ -65,11 +65,19 @@ export async function renderSearchableCareerChart() {
     // Populate dropdown with country names
     const updateDropdown = (filter) => {
         dropdown.innerHTML = ''; // Clear previous options
+        
+        // Define the specific order for career stages
+        const careerStageOrder = ['undiscovered', 'developing', 'mid-level', 'mainstream', 'superstar', 'legendary'];
+        
         const filteredData = data
             .filter(careerData =>
                 careerData.career_stage.toLowerCase().includes(filter.toLowerCase())
             )
-            .sort((a, b) => a.career_stage.localeCompare(b.career_stage)); // Sort alphabetically
+            .sort((a, b) => {
+                const aIndex = careerStageOrder.indexOf(a.career_stage.toLowerCase());
+                const bIndex = careerStageOrder.indexOf(b.career_stage.toLowerCase());
+                return aIndex - bIndex;
+            });
 
         filteredData.forEach((careerData, index) => {
             const option = document.createElement('div');
